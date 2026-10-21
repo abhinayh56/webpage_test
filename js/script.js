@@ -13,7 +13,6 @@ const panelRightToggle =
 
 function updateButton(button, isOpen, closedIcon) {
     button.setAttribute("aria-expanded", String(isOpen));
-    button.textContent = isOpen ? "×" : closedIcon;
 }
 
 /* =========================
