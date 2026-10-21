@@ -1,0 +1,227 @@
+/* =========================
+   Global Styles
+   ========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 6px;
+    font-family: Arial, sans-serif;
+}
+
+/* =========================
+   Main Layout
+   ========================= */
+
+.layout {
+    display: grid;
+    grid-template-columns: 160px minmax(0, 1fr) 180px;
+    grid-template-rows: 48px minmax(300px, 1fr) 48px;
+    min-height: 420px;
+    height: calc(100vh - 12px);
+    border: 1px solid #aaa;
+    overflow: hidden;
+}
+
+/* =========================
+   Top Bar
+   ========================= */
+
+.top_bar {
+    grid-column: 1 / 4;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px;
+    background: #f0f0f0;
+    border-bottom: 1px solid #aaa;
+    color: #888;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.top_bar_title {
+    flex: 1;
+    text-align: center;
+}
+
+/* =========================
+   Left Panel
+   ========================= */
+
+.panel_left {
+    grid-column: 1;
+    grid-row: 2 / 4;
+    background: #d6d6d6;
+}
+
+/* =========================
+   Main Content
+   ========================= */
+
+.content {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+/* =========================
+   Right Panel
+   ========================= */
+
+.panel_right {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+/* =========================
+   Bottom Bar
+   ========================= */
+
+.bottom_bar {
+    grid-column: 2 / 4;
+    grid-row: 3;
+    background: #fafafa;
+    border-left: 1px solid #aaa;
+}
+
+/* =========================
+   Common Panel Styles
+   ========================= */
+
+.panel_left,
+.content,
+.panel_right,
+.bottom_bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 0;
+    color: #888;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.content,
+.panel_right {
+    border-bottom: 1px solid #aaa;
+}
+
+.content {
+    border-right: 1px solid #aaa;
+}
+
+/* =========================
+   Panel Toggle Buttons
+   ========================= */
+
+.panel-toggle {
+    display: none;
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+}
+
+.panel-toggle:hover {
+    background: #e5e5e5;
+}
+
+.panel_left_toggle {
+    margin-right: 8px;
+}
+
+.panel_right_toggle {
+    margin-left: 8px;
+}
+
+/* =========================
+   Medium Screens
+   Collapse Right Panel
+   ========================= */
+
+@media (max-width: 900px) {
+    .layout {
+        grid-template-columns: 160px minmax(0, 1fr) 0;
+    }
+
+    .panel_right {
+        display: none;
+    }
+
+    .bottom_bar {
+        grid-column: 2 / 4;
+    }
+
+    .panel_right_toggle {
+        display: flex;
+    }
+
+    .layout.panel_right_open {
+        grid-template-columns: 160px minmax(0, 1fr) 180px;
+    }
+
+    .layout.panel_right_open .panel_right {
+        display: flex;
+        border-left: 1px solid #aaa;
+    }
+}
+
+/* =========================
+   Small Screens
+   Collapse Both Side Panels
+   ========================= */
+
+@media (max-width: 600px) {
+    .layout {
+        grid-template-columns: 0 minmax(0, 1fr) 0;
+    }
+
+    .panel_left {
+        display: none;
+    }
+
+    .content {
+        grid-column: 2;
+        border-right: none;
+    }
+
+    .bottom_bar {
+        grid-column: 2 / 4;
+        border-left: none;
+    }
+
+    .panel_left_toggle {
+        display: flex;
+    }
+
+    .layout.panel_left_open {
+        grid-template-columns: 160px minmax(0, 1fr) 0;
+    }
+
+    .layout.panel_left_open .panel_left {
+        display: flex;
+        border-right: 1px solid #aaa;
+    }
+
+    .layout.panel_right_open {
+        grid-template-columns: 0 minmax(0, 1fr) 180px;
+    }
+
+    .layout.panel_left_open.panel_right_open {
+        grid-template-columns: 160px minmax(0, 1fr) 180px;
+    }
+}
