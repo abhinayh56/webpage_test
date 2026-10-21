@@ -1,10 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Three-Column Layout</title>
+    <title>Responsive Layout</title>
 
     <style>
         * {
@@ -20,51 +20,76 @@
         .layout {
             display: grid;
             grid-template-columns: 160px minmax(0, 1fr) 180px;
-            grid-template-rows: minmax(300px, 1fr) 48px;
-            min-height: 380px;
+            grid-template-rows: 48px minmax(300px, 1fr) 48px;
+            min-height: 420px;
             height: calc(100vh - 12px);
             border: 1px solid #aaa;
             overflow: hidden;
         }
 
-        .sidebar {
-            grid-column: 1;
-            grid-row: 1 / 3;
-            background: #d6d6d6;
-        }
-
-        .content {
-            grid-column: 2;
+        /* Top bar */
+        .top_bar {
+            grid-column: 1 / 4;
             grid-row: 1;
-        }
-
-        .toc {
-            grid-column: 3;
-            grid-row: 1;
-        }
-
-        .footer {
-            grid-column: 2 / 4;
-            grid-row: 2;
-            background: #fafafa;
-        }
-
-        .sidebar,
-        .content,
-        .toc,
-        .footer {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
+            padding: 0 8px;
+            background: #f0f0f0;
+            border-bottom: 1px solid #aaa;
             color: #888;
             font-size: 14px;
             font-weight: 600;
+        }
+
+        .top_bar_title {
+            flex: 1;
+            text-align: center;
+        }
+
+        /* Left panel */
+        .panel_left {
+            grid-column: 1;
+            grid-row: 2 / 4;
+            background: #d6d6d6;
+        }
+
+        /* Main content */
+        .content {
+            grid-column: 2;
+            grid-row: 2;
+        }
+
+        /* Right panel */
+        .panel_right {
+            grid-column: 3;
+            grid-row: 2;
+        }
+
+        /* Bottom bar */
+        .bottom_bar {
+            grid-column: 2 / 4;
+            grid-row: 3;
+            background: #fafafa;
+            border-left: 1px solid #aaa;
+        }
+
+        .panel_left,
+        .content,
+        .panel_right,
+        .bottom_bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             min-width: 0;
             min-height: 0;
+            color: #888;
+            font-size: 14px;
+            font-weight: 600;
         }
 
         .content,
-        .toc {
+        .panel_right {
             border-bottom: 1px solid #aaa;
         }
 
@@ -72,72 +97,71 @@
             border-right: 1px solid #aaa;
         }
 
-        .footer {
-            border-left: 1px solid #aaa;
-        }
-
-        /* Toggle buttons are hidden on desktop */
+        /* Panel buttons inside the top bar */
         .panel-toggle {
             display: none;
-            position: fixed;
-            top: 50%;
-            z-index: 1001;
-            transform: translateY(-50%);
-            width: 30px;
-            height: 64px;
+            flex: 0 0 34px;
+            width: 34px;
+            height: 34px;
+            align-items: center;
+            justify-content: center;
             padding: 0;
-            border: 1px solid #999;
-            background: #eee;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            background: #fff;
             color: #333;
             cursor: pointer;
             font-size: 20px;
+            line-height: 1;
         }
 
-        .sidebar-toggle {
-            left: 0;
-            border-radius: 0 6px 6px 0;
+        .panel-toggle:hover {
+            background: #e5e5e5;
         }
 
-        .toc-toggle {
-            right: 0;
-            border-radius: 6px 0 0 6px;
+        .panel_left_toggle {
+            margin-right: 8px;
         }
 
-        /* Medium screens: collapse TOC to the right */
+        .panel_right_toggle {
+            margin-left: 8px;
+        }
+
+        /* Medium screens: collapse right panel */
         @media (max-width: 900px) {
             .layout {
                 grid-template-columns: 160px minmax(0, 1fr) 0;
             }
 
-            .toc {
+            .panel_right {
                 display: none;
             }
 
-            .footer {
+            .bottom_bar {
                 grid-column: 2 / 4;
             }
 
-            .toc-toggle {
-                display: block;
+            .panel_right_toggle {
+                display: flex;
             }
 
-            .layout.toc-open {
+            .layout.panel_right_open {
                 grid-template-columns: 160px minmax(0, 1fr) 180px;
             }
 
-            .layout.toc-open .toc {
+            .layout.panel_right_open .panel_right {
                 display: flex;
                 border-left: 1px solid #aaa;
             }
         }
 
-        /* Small screens: collapse Sidebar to the left as well */
+        /* Small screens: collapse both side panels */
         @media (max-width: 600px) {
             .layout {
                 grid-template-columns: 0 minmax(0, 1fr) 0;
             }
 
-            .sidebar {
+            .panel_left {
                 display: none;
             }
 
@@ -146,39 +170,30 @@
                 border-right: none;
             }
 
-            .footer {
+            .bottom_bar {
                 grid-column: 2 / 4;
                 border-left: none;
             }
 
-            .sidebar-toggle {
-                display: block;
+            .panel_left_toggle {
+                display: flex;
             }
 
-            .layout.sidebar-open {
+            .layout.panel_left_open {
                 grid-template-columns: 160px minmax(0, 1fr) 0;
             }
 
-            .layout.sidebar-open .sidebar {
+            .layout.panel_left_open .panel_left {
                 display: flex;
                 border-right: 1px solid #aaa;
             }
 
-            .layout.sidebar-open .content {
-                border-left: none;
-            }
-
-            /* Both panels can be opened simultaneously */
-            .layout.toc-open {
+            .layout.panel_right_open {
                 grid-template-columns: 0 minmax(0, 1fr) 180px;
             }
 
-            .layout.sidebar-open.toc-open {
+            .layout.panel_left_open.panel_right_open {
                 grid-template-columns: 160px minmax(0, 1fr) 180px;
-            }
-
-            .layout.sidebar-open.toc-open .toc {
-                display: flex;
             }
         }
     </style>
@@ -188,66 +203,93 @@
 
     <div class="layout" id="layout">
 
-        <aside class="sidebar">
-            Sidebar
+        <header class="top_bar">
+
+            <button
+                class="panel-toggle panel_left_toggle"
+                id="panelLeftToggle"
+                aria-label="Toggle left panel"
+                aria-controls="panelLeft"
+                aria-expanded="false">
+                ☰
+            </button>
+
+            <span class="top_bar_title">Top Bar</span>
+
+            <button
+                class="panel-toggle panel_right_toggle"
+                id="panelRightToggle"
+                aria-label="Toggle right panel"
+                aria-controls="panelRight"
+                aria-expanded="false">
+                ☰
+            </button>
+
+        </header>
+
+        <aside class="panel_left" id="panelLeft">
+            Panel Left
         </aside>
 
         <main class="content">
             Content
         </main>
 
-        <aside class="toc">
-            TOC
+        <aside class="panel_right" id="panelRight">
+            Panel Right
         </aside>
 
-        <footer class="footer">
-            Footer
+        <footer class="bottom_bar">
+            Bottom Bar
         </footer>
 
     </div>
 
-    <button class="panel-toggle sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar" aria-controls="layout"
-        aria-expanded="false">
-        ☰
-    </button>
-
-    <button class="panel-toggle toc-toggle" id="tocToggle" aria-label="Toggle table of contents" aria-controls="layout"
-        aria-expanded="false">
-        ☰
-    </button>
-
     <script>
         const layout = document.getElementById("layout");
-        const sidebarToggle = document.getElementById("sidebarToggle");
-        const tocToggle = document.getElementById("tocToggle");
 
-        sidebarToggle.addEventListener("click", () => {
-            const isOpen = layout.classList.toggle("sidebar-open");
+        const panelLeftToggle =
+            document.getElementById("panelLeftToggle");
 
-            sidebarToggle.setAttribute("aria-expanded", isOpen);
-            sidebarToggle.textContent = isOpen ? "×" : "☰";
+        const panelRightToggle =
+            document.getElementById("panelRightToggle");
+
+        function updateButton(button, isOpen) {
+            button.setAttribute("aria-expanded", String(isOpen));
+            button.textContent = isOpen ? "×" : "☰";
+        }
+
+        panelLeftToggle.addEventListener("click", () => {
+            const isOpen = layout.classList.toggle("panel_left_open");
+            updateButton(panelLeftToggle, isOpen);
         });
 
-        tocToggle.addEventListener("click", () => {
-            const isOpen = layout.classList.toggle("toc-open");
-
-            tocToggle.setAttribute("aria-expanded", isOpen);
-            tocToggle.textContent = isOpen ? "×" : "☰";
+        panelRightToggle.addEventListener("click", () => {
+            const isOpen = layout.classList.toggle("panel_right_open");
+            updateButton(panelRightToggle, isOpen);
         });
 
-        // Reset panel states when returning to desktop layout.
         function updateLayout() {
-            if (window.innerWidth > 900) {
-                layout.classList.remove("sidebar-open", "toc-open");
-                sidebarToggle.setAttribute("aria-expanded", "false");
-                tocToggle.setAttribute("aria-expanded", "false");
-                sidebarToggle.textContent = "☰";
-                tocToggle.textContent = "☰";
-            } else if (window.innerWidth > 600) {
-                layout.classList.remove("sidebar-open");
-                sidebarToggle.setAttribute("aria-expanded", "false");
-                sidebarToggle.textContent = "☰";
+            const width = window.innerWidth;
+
+            if (width > 900) {
+                layout.classList.remove(
+                    "panel_left_open",
+                    "panel_right_open"
+                );
+            } else if (width > 600) {
+                layout.classList.remove("panel_left_open");
             }
+
+            updateButton(
+                panelLeftToggle,
+                layout.classList.contains("panel_left_open")
+            );
+
+            updateButton(
+                panelRightToggle,
+                layout.classList.contains("panel_right_open")
+            );
         }
 
         window.addEventListener("resize", updateLayout);
@@ -255,5 +297,4 @@
     </script>
 
 </body>
-
 </html>
