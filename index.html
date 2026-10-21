@@ -1,0 +1,266 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Three-Column Layout</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 6px;
+            font-family: Arial, sans-serif;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 160px minmax(0, 1fr) 180px;
+            grid-template-rows: minmax(300px, 1fr) 48px;
+            min-height: 380px;
+            height: calc(100vh - 12px);
+            border: 1px solid #aaa;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            grid-column: 1;
+            grid-row: 1 / 3;
+            background: #d6d6d6;
+        }
+
+        .content {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .toc {
+            grid-column: 3;
+            grid-row: 1;
+        }
+
+        .footer {
+            grid-column: 2 / 4;
+            grid-row: 2;
+            background: #fafafa;
+        }
+
+        .sidebar,
+        .content,
+        .toc,
+        .footer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-size: 14px;
+            font-weight: 600;
+            min-width: 0;
+            min-height: 0;
+        }
+
+        .content,
+        .toc {
+            border-bottom: 1px solid #aaa;
+        }
+
+        .content {
+            border-right: 1px solid #aaa;
+        }
+
+        .footer {
+            border-left: 1px solid #aaa;
+        }
+
+        /* Toggle buttons are hidden on desktop */
+        .panel-toggle {
+            display: none;
+            position: fixed;
+            top: 50%;
+            z-index: 1001;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 64px;
+            padding: 0;
+            border: 1px solid #999;
+            background: #eee;
+            color: #333;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .sidebar-toggle {
+            left: 0;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .toc-toggle {
+            right: 0;
+            border-radius: 6px 0 0 6px;
+        }
+
+        /* Medium screens: collapse TOC to the right */
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 160px minmax(0, 1fr) 0;
+            }
+
+            .toc {
+                display: none;
+            }
+
+            .footer {
+                grid-column: 2 / 4;
+            }
+
+            .toc-toggle {
+                display: block;
+            }
+
+            .layout.toc-open {
+                grid-template-columns: 160px minmax(0, 1fr) 180px;
+            }
+
+            .layout.toc-open .toc {
+                display: flex;
+                border-left: 1px solid #aaa;
+            }
+        }
+
+        /* Small screens: collapse Sidebar to the left as well */
+        @media (max-width: 600px) {
+            .layout {
+                grid-template-columns: 0 minmax(0, 1fr) 0;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .content {
+                grid-column: 2;
+                border-right: none;
+            }
+
+            .footer {
+                grid-column: 2 / 4;
+                border-left: none;
+            }
+
+            .sidebar-toggle {
+                display: block;
+            }
+
+            .layout.sidebar-open {
+                grid-template-columns: 160px minmax(0, 1fr) 0;
+            }
+
+            .layout.sidebar-open .sidebar {
+                display: flex;
+                border-right: 1px solid #aaa;
+            }
+
+            .layout.sidebar-open .content {
+                border-left: none;
+            }
+
+            /* Both panels can be opened simultaneously */
+            .layout.toc-open {
+                grid-template-columns: 0 minmax(0, 1fr) 180px;
+            }
+
+            .layout.sidebar-open.toc-open {
+                grid-template-columns: 160px minmax(0, 1fr) 180px;
+            }
+
+            .layout.sidebar-open.toc-open .toc {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="layout" id="layout">
+
+        <aside class="sidebar">
+            Sidebar
+        </aside>
+
+        <main class="content">
+            Content
+        </main>
+
+        <aside class="toc">
+            TOC
+        </aside>
+
+        <footer class="footer">
+            Footer
+        </footer>
+
+    </div>
+
+    <button
+        class="panel-toggle sidebar-toggle"
+        id="sidebarToggle"
+        aria-label="Toggle sidebar"
+        aria-controls="layout"
+        aria-expanded="false">
+        ☰
+    </button>
+
+    <button
+        class="panel-toggle toc-toggle"
+        id="tocToggle"
+        aria-label="Toggle table of contents"
+        aria-controls="layout"
+        aria-expanded="false">
+        ☰
+    </button>
+
+    <script>
+        const layout = document.getElementById("layout");
+        const sidebarToggle = document.getElementById("sidebarToggle");
+        const tocToggle = document.getElementById("tocToggle");
+
+        sidebarToggle.addEventListener("click", () => {
+            const isOpen = layout.classList.toggle("sidebar-open");
+
+            sidebarToggle.setAttribute("aria-expanded", isOpen);
+            sidebarToggle.textContent = isOpen ? "×" : "☰";
+        });
+
+        tocToggle.addEventListener("click", () => {
+            const isOpen = layout.classList.toggle("toc-open");
+
+            tocToggle.setAttribute("aria-expanded", isOpen);
+            tocToggle.textContent = isOpen ? "×" : "☰";
+        });
+
+        // Reset panel states when returning to desktop layout.
+        function updateLayout() {
+            if (window.innerWidth > 900) {
+                layout.classList.remove("sidebar-open", "toc-open");
+                sidebarToggle.setAttribute("aria-expanded", "false");
+                tocToggle.setAttribute("aria-expanded", "false");
+                sidebarToggle.textContent = "☰";
+                tocToggle.textContent = "☰";
+            } else if (window.innerWidth > 600) {
+                layout.classList.remove("sidebar-open");
+                sidebarToggle.setAttribute("aria-expanded", "false");
+                sidebarToggle.textContent = "☰";
+            }
+        }
+
+        window.addEventListener("resize", updateLayout);
+        updateLayout();
+    </script>
+
+</body>
+</html>
