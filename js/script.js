@@ -13,6 +13,7 @@ const panelRightToggle =
 
 function updateButton(button, isOpen, closedIcon) {
     button.setAttribute("aria-expanded", String(isOpen));
+    /* button.textContent = isOpen ? "×" : closedIcon; */
 }
 
 /* =========================
@@ -42,15 +43,7 @@ panelRightToggle.addEventListener("click", () => {
 function updateLayout() {
     const width = window.innerWidth;
 
-    if (width > 900) {
-        layout.classList.remove(
-            "panel_left_open",
-            "panel_right_open"
-        );
-    } else if (width > 600) {
-        layout.classList.remove("panel_left_open");
-    }
-
+    // Synchronize the button icons with the current panel states.
     updateButton(
         panelLeftToggle,
         layout.classList.contains("panel_left_open"),

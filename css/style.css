@@ -119,8 +119,9 @@ body {
    Panel Toggle Buttons
    ========================= */
 
+
 .panel-toggle {
-    display: none;
+    display: flex;
     flex: 0 0 34px;
     width: 34px;
     height: 34px;
@@ -139,6 +140,7 @@ body {
 .panel-toggle:hover {
     background: #e5e5e5;
 }
+
 
 .panel_left_toggle {
     margin-right: 8px;
@@ -223,5 +225,54 @@ body {
 
     .layout.panel_left_open.panel_right_open {
         grid-template-columns: 160px minmax(0, 1fr) 180px;
+    }
+}
+
+
+/* =========================
+   Desktop Panel Collapse
+   ========================= */
+
+@media (min-width: 901px) {
+    /* Collapse the left panel */
+    .layout.panel_left_open {
+        grid-template-columns: 0 minmax(0, 1fr) 180px;
+    }
+
+    .layout.panel_left_open .panel_left {
+        display: none;
+    }
+
+    /* Collapse the right panel */
+    .layout.panel_right_open {
+        grid-template-columns: 160px minmax(0, 1fr) 0;
+    }
+
+    .layout.panel_right_open .panel_right {
+        display: none;
+    }
+
+    /* Collapse both panels */
+    .layout.panel_left_open.panel_right_open {
+        grid-template-columns: 0 minmax(0, 1fr) 0;
+    }
+
+    .layout.panel_left_open.panel_right_open .panel_left,
+    .layout.panel_left_open.panel_right_open .panel_right {
+        display: none;
+    }
+
+    /* Allow content and bottom bar to use available space */
+    .layout.panel_left_open .content {
+        grid-column: 2;
+    }
+
+    .layout.panel_right_open .bottom_bar {
+        grid-column: 2 / 4;
+    }
+
+    .layout.panel_left_open.panel_right_open .bottom_bar {
+        grid-column: 2 / 4;
+        border-left: none;
     }
 }
