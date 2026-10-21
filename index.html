@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -205,24 +205,16 @@
 
         <header class="top_bar">
 
-            <button
-                class="panel-toggle panel_left_toggle"
-                id="panelLeftToggle"
-                aria-label="Toggle left panel"
-                aria-controls="panelLeft"
-                aria-expanded="false">
+            <button class="panel-toggle panel_left_toggle" id="panelLeftToggle" aria-label="Toggle left menu"
+                aria-controls="panelLeft" aria-expanded="false">
                 ☰
             </button>
 
             <span class="top_bar_title">Top Bar</span>
 
-            <button
-                class="panel-toggle panel_right_toggle"
-                id="panelRightToggle"
-                aria-label="Toggle right panel"
-                aria-controls="panelRight"
-                aria-expanded="false">
-                ☰
+            <button class="panel-toggle panel_right_toggle" id="panelRightToggle"
+                aria-label="Toggle right content panel" aria-controls="panelRight" aria-expanded="false">
+                ▤
             </button>
 
         </header>
@@ -254,41 +246,40 @@
         const panelRightToggle =
             document.getElementById("panelRightToggle");
 
-        function updateButton(button, isOpen) {
+        function updateButton(button, isOpen, closedIcon) {
             button.setAttribute("aria-expanded", String(isOpen));
-            button.textContent = isOpen ? "×" : "☰";
+            button.textContent = isOpen ? "×" : closedIcon;
         }
 
         panelLeftToggle.addEventListener("click", () => {
             const isOpen = layout.classList.toggle("panel_left_open");
-            updateButton(panelLeftToggle, isOpen);
+            updateButton(panelLeftToggle, isOpen, "☰");
         });
 
         panelRightToggle.addEventListener("click", () => {
             const isOpen = layout.classList.toggle("panel_right_open");
-            updateButton(panelRightToggle, isOpen);
+            updateButton(panelRightToggle, isOpen, "▤");
         });
 
         function updateLayout() {
             const width = window.innerWidth;
 
             if (width > 900) {
-                layout.classList.remove(
-                    "panel_left_open",
-                    "panel_right_open"
-                );
+                layout.classList.remove("panel_left_open", "panel_right_open");
             } else if (width > 600) {
                 layout.classList.remove("panel_left_open");
             }
 
             updateButton(
                 panelLeftToggle,
-                layout.classList.contains("panel_left_open")
+                layout.classList.contains("panel_left_open"),
+                "☰"
             );
 
             updateButton(
                 panelRightToggle,
-                layout.classList.contains("panel_right_open")
+                layout.classList.contains("panel_right_open"),
+                "▤"
             );
         }
 
@@ -297,4 +288,5 @@
     </script>
 
 </body>
+
 </html>
